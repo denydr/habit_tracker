@@ -123,13 +123,13 @@ class DataPersistence:
 
     def delete_habit(self, habit_id):
         """
-        Delete a habit and its completions from the database.
+        Remove a habit and its completions from the database.
 
         Args:
             habit_id (int): The ID of the habit to be deleted.
         """
-        self.cur.execute("DELETE FROM completions WHERE habit_id = %s", (habit_id,))
-        self.cur.execute("DELETE FROM habits WHERE id = %s", (habit_id,))
+        self.cur.execute(f"DELETE FROM completions WHERE habit_id = {habit_id}")
+        self.cur.execute(f"DELETE FROM habits WHERE id = {habit_id}")
         self.conn.commit()
 
     def __del__(self):

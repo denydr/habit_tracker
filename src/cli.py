@@ -31,6 +31,10 @@ def main():
     analyze_parser.add_argument("--longest-streak", action="store_true", help="Get the longest streak for all habits")
     analyze_parser.add_argument("--habit-id", type=int, help="Get the longest streak for a specific habit")
 
+    # Delete habit
+    delete_parser = subparsers.add_parser("delete", help="Delete habit by ID")
+    delete_parser.add_argument("habit_id", type=int, help="ID of the habit to be deleted")
+
     args = parser.parse_args()
 
     # Initialize database connection
@@ -75,6 +79,12 @@ def main():
         else:
             print("Please specify either --longest-streak or --habit-id")
 
+    elif args.command == "delete":
+        habit = habit_tracker.delete_habit(args.habit_id)
+        if habit:
+            print(f"Habit '{habit.name}' deleted")
+        else:
+            print(f"Habit '{habit.name}' not found")
 
 if __name__ == "__main__":
     main()

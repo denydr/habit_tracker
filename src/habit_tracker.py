@@ -117,5 +117,18 @@ class HabitTracker:
         return habit.get_current_streak()
 
     # TODO: To create the implementation
-    def delete_habit(self, habit):
-        pass
+    def delete_habit(self, habit_id):
+        """
+        Delete a habit.
+
+        Args:
+            habit_id (int): The ID of the habit to be deleted.
+
+        Returns:
+            Habit: The deleted habit object, or None if not found.
+        """
+        habit = self.get_habit_by_id(habit_id)
+        if habit:
+            self.db.delete_habit(habit_id)
+        return habit
+

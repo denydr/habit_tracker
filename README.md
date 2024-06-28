@@ -198,6 +198,12 @@ python -m src.cli list
 python -m src.cli analyze --longest-streak
 python -m src.cli analyze --habit-id [habit_id] 
 ```  
+- `delete`: Delete habit by habit id 
+```shell 
+python -m src.cli delete [habit_id] 
+```
+
+
 
 - Example:  
 ```shell
@@ -206,6 +212,7 @@ python -m src.habit_tracker complete 7
 python -m src.habit_tracker list
 python -m src.habit_tracker analyze --longest-streak
 python -m src.habit_tracker analyze --habit-id 7
+python -m src.habit_tracker delete --habit-id 7
 ```
 
 
