@@ -1,4 +1,3 @@
-# habit.py
 from datetime import datetime
 
 

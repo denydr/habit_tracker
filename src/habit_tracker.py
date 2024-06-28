@@ -1,4 +1,3 @@
-# habit_tracker.py
 from src.habit import Habit
 
 
