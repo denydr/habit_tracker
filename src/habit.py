@@ -1,5 +1,6 @@
 from datetime import datetime
 
+# TODO: Create UML diagram
 # TODO: Add error handling (try...except)
 # TODO: Implement logging
 class Habit:
