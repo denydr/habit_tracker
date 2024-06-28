@@ -10,8 +10,6 @@ load_dotenv()
 
 # Determine the correct host
 db_host = os.getenv('DATABASE_HOST', 'localhost')
-if os.getenv('DOCKER_ENV') == 'true':
-    db_host = 'db'
 
 
 class DataPersistence:

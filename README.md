@@ -12,7 +12,7 @@ The `habit_tracker_project` has the following structure:
 habit_tracker/
 ├── docs/
 │   ├── build/
-│   └── source/
+│   └── source_orig/
 ├── src/
 │   ├── __init__.py
 │   ├── cli.py
@@ -65,21 +65,15 @@ cd habit_tracker
 pip install -r requirements.txt
 ```  
 
-2. Create and activate a virtual environment:  
+3. Create and activate a virtual environment:  
 
 ```shell
 python -m venv venv
-source venv/bin/activate  # On Windows, use venv\Scripts\activate  
-```  
-
-3. Install the required packages:  
-
-```shell
-pip install -r requirements.txt
-```  
+source_orig venv/bin/activate  # On Windows, use venv\Scripts\activate  
+```
 
 4. Set up PostgreSQL:  
-- Install PostgreSQL if you haven't already:  
+- Install PostgreSQL:  
 ```shell
 brew install postgresql@13 
 ```  
@@ -98,17 +92,10 @@ vi ~/.zshrc
 # --------
 # PostgreSQL
 export PATH="/opt/homebrew/opt/postgresql@13/bin:$PATH"
-
-# If you want to customize your prompt, you can add something like this:
-# export PS1='%n@%m %1~ %# '
-
-# Any other customizations you want can go here
-# --------
-
 # Save and exit the file
-wq
+:wq
 # Reload the new .zshrc file
-source ~/.zshrc
+source_orig ~/.zshrc
 ```
 
 - Connecting to the PostgreSQL server:  
@@ -135,12 +122,38 @@ i --> click Enter
 # Add this line
 localhost:5432:habit_tracker:habit_tracker:admin
 # Save and close
+click 'Esc'
 wq --> click Enter
 # Update permissions
 chmod -R 0600 ~/.pgpass
 ```  
  
 - Update the database connection details in `src/data_persistence.py`  
+
+## Loading Sample Data  
+
+To load sample data into the database for testing and demonstration purposes, follow these steps:
+
+1. Ensure you have set up the PostgreSQL database as described in the Installation section.
+
+2. Update the database credentials in the `sample_data.py` script with your actual PostgreSQL username and password.
+
+3. Run the sample data script:
+
+```shell
+python -m src.sample_data
+```  
+
+After running the sample_data.py script, your database will be populated with the following sample habits:
+
+    1. Morning Exercise (daily)
+    2. Read a Book (daily)
+    3. Meditate (daily)
+    4. Weekly Planning (weekly)
+    5. Learn a New Skill (weekly)
+
+Each habit will have completion data for the past four weeks, with daily habits being completed every other day and weekly habits being completed once a week.
+This sample data will allow users to immediately start testing the application's features, such as listing habits, analyzing streaks, and adding new completions to existing habits. It provides a realistic starting point for users to understand how the application works with actual data.
 
 ## Usage  
 
@@ -181,30 +194,6 @@ python -m src.habit_tracker analyze --longest-streak
 python -m src.habit_tracker analyze --habit-id 7
 ```
 
-## Loading Sample Data  
-
-To load sample data into the database for testing and demonstration purposes, follow these steps:
-
-1. Ensure you have set up the PostgreSQL database as described in the Installation section.
-
-2. Update the database credentials in the `sample_data.py` script with your actual PostgreSQL username and password.
-
-3. Run the sample data script:
-
-```shell
-python -m src.sample_data.py
-```  
-
-After running the sample_data.py script, your database will be populated with the following sample habits:
-
-    1. Morning Exercise (daily)
-    2. Read a Book (daily)
-    3. Meditate (daily)
-    4. Weekly Planning (weekly)
-    5. Learn a New Skill (weekly)
-
-Each habit will have completion data for the past four weeks, with daily habits being completed every other day and weekly habits being completed once a week.
-This sample data will allow users to immediately start testing the application's features, such as listing habits, analyzing streaks, and adding new completions to existing habits. It provides a realistic starting point for users to understand how the application works with actual data.
 
 ## Running Tests
 
@@ -224,13 +213,19 @@ To generate the documentation, follow these steps:
 cd docs
 ```  
 
-2. Build the HTML documentation:  
+2. Generate `sphinx-quickstart` skeleton:  
+
+```shell
+sphinx-quickstart
+```  
+
+3. Build the HTML documentation:  
 
 ```shell
 make html
 ```  
 
-3. Open the generated documentation in your browser:  
+4. Open the generated documentation in your browser:  
 
 ```shell
 open build/html/index.html
@@ -243,4 +238,3 @@ Feel free to submit issues and pull requests for new features or bug fixes.
 ## License
 
 This project is licensed under the MIT License.  
-
