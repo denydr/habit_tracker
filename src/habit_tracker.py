@@ -116,7 +116,6 @@ class HabitTracker:
         """
         return habit.get_current_streak()
 
-    # TODO: To create the implementation
     def delete_habit(self, habit_id):
         """
         Delete a habit.
