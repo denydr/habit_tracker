@@ -9,7 +9,7 @@ It is built with Python and is using PostgreSQL server for data persistence.
 The `habit_tracker_project` has the following structure:  
 
 ```shell
-habit_tracker_app/
+habit_tracker/
 ├── docs/
 │   ├── build/
 │   └── source/
