@@ -1,6 +1,7 @@
 from src.habit import Habit
 
-
+# TODO: Add error handling (try...except)
+# TODO: Implement logging
 class HabitTracker:
     """
     Main class for tracking habits.

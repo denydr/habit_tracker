@@ -1,6 +1,7 @@
 from datetime import datetime
 
-
+# TODO: Add error handling (try...except)
+# TODO: Implement logging
 class Habit:
     """
     Represents a habit to be tracked.

@@ -5,6 +5,9 @@ from psycopg2 import sql
 from datetime import datetime
 from src.habit import Habit
 
+# TODO: Add error handling (try...except)
+# TODO: Implement logging
+
 # Load environment variables from .env file
 load_dotenv()
 

@@ -2,6 +2,9 @@ from datetime import datetime, timedelta
 from src.data_persistence import DataPersistence
 from src.habit import Habit
 
+# TODO: Add error handling (try...except)
+# TODO: Implement logging
+
 
 def generate_sample_data(db):
     """

@@ -2,6 +2,8 @@ import argparse
 from src.habit_tracker import HabitTracker
 from src.data_persistence import DataPersistence
 
+# TODO: Add error handling (try...except)
+# TODO: Implement logging
 
 def main():
     """
