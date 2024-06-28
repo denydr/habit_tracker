@@ -55,8 +55,8 @@ where:
 1. Clone this repository:  
 
 ```shell
-git clone https://github.com/denydr/habit_tracker_app.git
-cd habit_tracker_app
+git clone https://github.com/denydr/habit_tracker.git
+cd habit_tracker
 ```  
 
 2. Install the required packages:  
