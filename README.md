@@ -84,14 +84,16 @@ brew services start postgresql@13
 
 - Set the environment:  
 ```shell
-# Create the .zshrc file
+# Create the .zshrc file if does not exist
 touch ~/.zshrc
 # Open the newly created file in a text editor
 vi ~/.zshrc
+# Enter in edit mode
+press 'i' button
 # Add the following lines to the file
-# --------
-# PostgreSQL
 export PATH="/opt/homebrew/opt/postgresql@13/bin:$PATH"
+# Exit edit mode
+press 'Esc' button
 # Save and exit the file
 :wq
 # Reload the new .zshrc file
@@ -126,9 +128,21 @@ click 'Esc'
 wq --> click Enter
 # Update permissions
 chmod -R 0600 ~/.pgpass
+```   
+
+- Stopping the PostgreSQL:  
+```shell
+brew services stop postgresql@13
 ```  
- 
-- Update the database connection details in `src/data_persistence.py`  
+
+- Update the database connection details in `.env` file  
+```shell
+DATABASE_USER=habit_tracker
+DATABASE_PASSWORD=admin
+DATABASE_HOST=localhost
+DATABASE_PORT=5432
+DATABASE_NAME=habit_tracker 
+```  
 
 ## Loading Sample Data  
 
@@ -136,7 +150,7 @@ To load sample data into the database for testing and demonstration purposes, fo
 
 1. Ensure you have set up the PostgreSQL database as described in the Installation section.
 
-2. Update the database credentials in the `sample_data.py` script with your actual PostgreSQL username and password.
+2. Update the database credentials in the `.env` file with your actual PostgreSQL username and password.
 
 3. Run the sample data script:
 

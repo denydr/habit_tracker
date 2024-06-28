@@ -115,3 +115,7 @@ class HabitTracker:
             int: The longest streak for the given habit.
         """
         return habit.get_current_streak()
+
+    # TODO: To create the implementation
+    def delete_habit(self, habit):
+        pass
