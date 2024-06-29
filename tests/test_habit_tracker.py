@@ -6,6 +6,7 @@ from src.habit_tracker import HabitTracker
 
 
 class MockDataPersistence:
+    """ Class for testing data persistence """
     def __init__(self):
         self.habits = []
 
