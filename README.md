@@ -55,6 +55,7 @@ classDiagram
         +get_habit_by_id(habit_id: int) Habit
         +get_longest_streak_all_habits() tuple[int, Habit]
         +get_longest_streak_for_habit(habit: Habit) int
+        +delete_habit(habit_id: int) Habit
     }
 
     class DataPersistence {
@@ -78,11 +79,17 @@ classDiagram
         +generate_sample_data(db: DataPersistence)
     }
 
+    class CLI {
+        +main()
+    }
+
     HabitTracker o-- DataPersistence
     HabitTracker -- Habit
     SampleDataGenerator ..> DataPersistence
     SampleDataGenerator ..> Habit
-```  
+    CLI ..> HabitTracker
+    CLI ..> DataPersistence
+```
 This UML class diagram represents the structure and relationships between the classes in the 
 provided Python modules:  
 
@@ -112,9 +119,19 @@ since it is not part of the class structure. However, it creates an instance of 
 SampleDataGenerator class and calls the generate_sample_data method, passing a 
 DataPersistence object as an argument.  
 
-`Note:` The cli.py module is not included in the UML diagram as it mainly serves as 
-the command-line interface for interacting with the HabitTracker and does not introduce 
-any new classes or relationships.
+The CLI class has a single static method main, which is the entry point for the command-line interface. 
+This method sets up the argument parser, initializes the database connection, and handles the 
+different commands for interacting with the Habit Tracker.  
+The CLI class has dependencies on both the HabitTracker and DataPersistence classes, 
+as shown by the dashed arrow lines. This means that the main method uses these classes to perform the
+requested actions based on the user's command-line arguments.  
+The main method creates an instance of the DataPersistence class to establish a database connection 
+and an instance of the HabitTracker class to interact with the habits and their data.  
+The relationships between the HabitTracker, DataPersistence, Habit, and SampleDataGenerator classes 
+remain the same as in the previous diagrams.  
+This updated UML class diagram provides a comprehensive overview of the structure and relationships 
+of the classes in the modified cli.py module and how it interacts with the other classes in the 
+Habit Tracker application.
 
 
 ## Development

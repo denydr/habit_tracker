@@ -3,6 +3,7 @@ from src.habit_tracker import HabitTracker
 from src.data_persistence import DataPersistence
 
 # TODO: Add error handling (try...except)
+# TODO: Add help command
 # TODO: Implement logging
 
 
