@@ -29,6 +29,94 @@ habit_tracker/
 └── requirements.txt
 ```  
 
+## UML diagram  
+
+```mermaid
+classDiagram
+    class Habit {
+        +int id
+        +str name
+        +str description
+        +str periodicity
+        +datetime creation_date
+        +list completed_dates
+        +__init__(name: str, description: str, periodicity: str, id: int = None, creation_date: datetime = None)
+        +complete_task()
+        +is_task_completed() bool
+        +get_current_streak() int
+    }
+
+    class HabitTracker {
+        -DataPersistence db
+        +__init__(db: DataPersistence)
+        +add_habit(name: str, description: str, periodicity: str) Habit
+        +complete_habit(habit_id: int) Habit
+        +get_all_habits() list[Habit]
+        +get_habit_by_id(habit_id: int) Habit
+        +get_longest_streak_all_habits() tuple[int, Habit]
+        +get_longest_streak_for_habit(habit: Habit) int
+    }
+
+    class DataPersistence {
+        -str dbname
+        -str user
+        -str password
+        -str host
+        -str port
+        -Connection conn
+        -Cursor cur
+        +__init__(dbname: str, user: str, password: str, host: str = 'localhost', port: str = '5432')
+        +create_tables()
+        +save_habit(habit: Habit) int
+        +load_habits() list[Habit]
+        +update_habit(habit: Habit)
+        +delete_habit(habit_id: int)
+        -__del__()
+    }
+
+    class SampleDataGenerator {
+        +generate_sample_data(db: DataPersistence)
+    }
+
+    HabitTracker o-- DataPersistence
+    HabitTracker -- Habit
+    SampleDataGenerator ..> DataPersistence
+    SampleDataGenerator ..> Habit
+```  
+This UML class diagram represents the structure and relationships between the classes in the 
+provided Python modules:  
+
+The Habit class represents a habit to be tracked, with attributes such as id, 
+name, description, periodicity, creation_date, and completed_dates. 
+It also has methods like complete_task(), is_task_completed(), and get_current_streak().  
+The HabitTracker class contains a DataPersistence object as a dependency and provides methods 
+for adding habits, completing habits, retrieving all habits, getting a habit by ID, 
+and analyzing habits for the longest streaks.  
+The DataPersistence class handles database operations, including creating tables, 
+saving habits, loading habits, updating habits, and deleting habits. 
+It establishes a connection to the PostgreSQL database using the provided credentials.  
+
+The HabitTracker class depends on the DataPersistence class for data storage and 
+retrieval, and it also interacts with the Habit class to manage and analyze habits.  
+
+The SampleDataGenerator class has a single static method generate_sample_data, which takes 
+a DataPersistence object as an argument. This is indicated by 
+the +generate_sample_data(db: DataPersistence) method signature in the class diagram.  
+The SampleDataGenerator class has dependencies on both the DataPersistence and Habit classes, 
+as shown by the dashed arrow lines. This means that the generate_sample_data method uses 
+both of these classes to generate and insert sample data into the database.  
+The relationships between the HabitTracker, DataPersistence, and Habit classes remain 
+the same as in the previous diagrams.  
+The main block of the sample_data.py module is not represented in the class diagram 
+since it is not part of the class structure. However, it creates an instance of the 
+SampleDataGenerator class and calls the generate_sample_data method, passing a 
+DataPersistence object as an argument.  
+
+`Note:` The cli.py module is not included in the UML diagram as it mainly serves as 
+the command-line interface for interacting with the HabitTracker and does not introduce 
+any new classes or relationships.
+
+
 ## Development
 
 - The `src` directory contains the main application code.  
