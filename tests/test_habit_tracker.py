@@ -3,8 +3,6 @@ from datetime import datetime, timedelta
 from src.habit_tracker import HabitTracker
 
 # TODO: To fix the pytests: 1) The failing ones; 2) Create additional tests; 3) Add documentation for methods
-
-
 class MockDataPersistence:
     """ Class for testing data persistence """
     def __init__(self):

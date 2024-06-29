@@ -2,6 +2,8 @@ from src.habit import Habit
 
 # TODO: Add error handling (try...except)
 # TODO: Implement logging
+# TODO: In the readme in USAGE - Return a list of all habits with the same periodicity
+
 class HabitTracker:
     """
     Main class for tracking habits.
