@@ -49,6 +49,7 @@ class HabitTracker:
         Returns:
             Habit: The completed habit object, or None if not found.
         """
+
         habit = self.get_habit_by_id(habit_id)
         if habit:
             habit.complete_task()
@@ -65,6 +66,10 @@ class HabitTracker:
         Returns:
             Habit: The habit object with the given ID, or None if not found.
         """
+
+        # This statement - (habit for habit in self.habits if habit.id == habit_id) - returns the iterator
+        # object but not the habit object itself.
+        # Therefore, next function is needed to return the actual habit object from the iterator.
         return next((habit for habit in self.habits if habit.id == habit_id), None)
 
     def get_all_habits(self):
@@ -74,6 +79,7 @@ class HabitTracker:
         Returns:
             list: A list of all Habit objects.
         """
+
         return self.habits
 
     def get_habits_by_periodicity(self, periodicity):
@@ -86,6 +92,7 @@ class HabitTracker:
         Returns:
             list: A list of Habit objects with the given periodicity.
         """
+
         return [habit for habit in self.habits if habit.periodicity == periodicity]
 
     def get_longest_streak_all_habits(self):
@@ -95,12 +102,13 @@ class HabitTracker:
         Returns:
             tuple: A tuple containing the longest streak (int) and the corresponding Habit object.
         """
+
         if not self.habits:
             return 0, None
         longest_streak = 0
         longest_streak_habit = None
         for habit in self.habits:
-            streak = habit.get_current_streak()
+            streak = habit.get_accumulated_streak()
             if streak > longest_streak:
                 longest_streak = streak
                 longest_streak_habit = habit
@@ -117,7 +125,7 @@ class HabitTracker:
         Returns:
             int: The longest streak for the given habit.
         """
-        return habit.get_current_streak()
+        return habit.get_accumulated_streak()
 
     def delete_habit(self, habit_id):
         """

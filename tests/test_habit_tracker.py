@@ -2,7 +2,12 @@ import pytest
 from datetime import datetime, timedelta
 from src.habit_tracker import HabitTracker
 
-# TODO: To fix the pytests: 1) The failing ones; 2) Create additional tests; 3) Add documentation for methods
+# TODO: To fix the pytests:
+#  0) Correct tests:
+#      - test_complete_habit
+#  1) The failing ones;
+#  2) Create additional tests;
+#  3) Add documentation for methods
 class MockDataPersistence:
     """ Class for testing data persistence """
     def __init__(self):
@@ -46,6 +51,12 @@ def test_add_habit(habit_tracker):
 
 
 def test_complete_habit(habit_tracker):
+    """
+    Testing whether the habit is completed.
+    :param habit_tracker: The habit_tracker object
+    :return: None
+    """
+
     habit = habit_tracker.add_habit("Exercise", "Do 30 minutes of exercise", "daily")
     completed_habit = habit_tracker.complete_habit(habit.id)
     assert completed_habit.is_task_completed()
@@ -129,20 +140,20 @@ def test_habit_is_task_completed(habit_tracker):
     assert not habit.is_task_completed()
 
 
-def test_habit_get_current_streak(habit_tracker):
+def test_habit_get_accumulated_streak(habit_tracker):
     habit = habit_tracker.add_habit("Exercise", "Do 30 minutes of exercise", "daily")
-    assert habit.get_current_streak() == 0
+    assert habit.get_accumulated_streak() == 0
 
     # Complete habit for 3 consecutive days
     for _ in range(3):
         habit_tracker.complete_habit(habit.id)
         habit.creation_date -= timedelta(days=1)
 
-    assert habit.get_current_streak() == 3
+    assert habit.get_accumulated_streak() == 3
 
     # Miss a day
     habit.creation_date -= timedelta(days=1)
-    assert habit.get_current_streak() == 0
+    assert habit.get_accumulated_streak() == 0
 
 
 # Run the tests

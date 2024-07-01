@@ -5,6 +5,10 @@ from src.data_persistence import DataPersistence
 # TODO: Add error handling (try...except)
 # TODO: Add help command
 # TODO: Implement logging
+# TODO: Users want answers to the questions:
+#       (1) What's my longest habit streak?
+#       (1) What's the list of my current daily habits?
+#       (3) With which habits did I struggle most last month?
 
 
 class CLI:
@@ -18,6 +22,7 @@ class CLI:
         This function sets up the argument parser, initializes the database connection,
         and handles the different commands for interacting with the Habit Tracker.
         """
+
         parser = argparse.ArgumentParser(description="Habit Tracking Application")
         subparsers = parser.add_subparsers(dest="command", help="Available commands")
 
@@ -69,7 +74,7 @@ class CLI:
                         f"ID: {habit.id}, "
                         f"Name: {habit.name}, "
                         f"Periodicity: {habit.periodicity}, "
-                        f"Current Streak: {habit.get_current_streak()}"
+                        f"Current Streak: {habit.get_accumulated_streak()}"
                     )
             else:
                 print("No habits found")
@@ -85,6 +90,8 @@ class CLI:
                     print(f"Longest streak for '{habit.name}': {longest_streak}")
                 else:
                     print(f"Habit with ID {args.habit_id} not found")
+            # TODO: return list of habits with same periodicity
+            # TODO: return a list of all currently tracked habits
             else:
                 print("Please specify either --longest-streak or --habit-id")
 

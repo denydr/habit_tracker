@@ -17,6 +17,7 @@ class SampleDataGenerator:
         Args:
             db (DataPersistence): The database connection object.
         """
+
         # Sample habits
         habits = [
             Habit("Morning Exercise", "Do 30 minutes of exercise every morning", "daily"),

@@ -52,7 +52,8 @@ class DataPersistence:
                 name VARCHAR(100) NOT NULL,
                 description TEXT,
                 periodicity VARCHAR(10) NOT NULL,
-                creation_date TIMESTAMP NOT NULL
+                creation_date TIMESTAMP NOT NULL,
+                is_broken BOOLEAN DEFAULT FALSE
             )
         """)
         self.cur.execute("""
@@ -81,10 +82,11 @@ class DataPersistence:
         """, (habit.name, habit.description, habit.periodicity, habit.creation_date))
         habit_id = self.cur.fetchone()[0]
         for completion_date in habit.completed_dates:
-            self.cur.execute("""
-                INSERT INTO completions (habit_id, completion_date)
-                VALUES (%s, %s)
-            """, (habit_id, completion_date))
+            if completion_date:
+                self.cur.execute("""
+                    INSERT INTO completions (habit_id, completion_date)
+                    VALUES (%s, %s)
+                """, (habit_id, completion_date))
         self.conn.commit()
         return habit_id
 
@@ -137,5 +139,6 @@ class DataPersistence:
 
     def __del__(self):
         """Close the database connection when the object is destroyed."""
+
         self.cur.close()
         self.conn.close()
