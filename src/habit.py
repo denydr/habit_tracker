@@ -1,7 +1,18 @@
 from datetime import datetime
+import logging
 
-# TODO: Add error handling (try...except)
-# TODO: Implement logging
+# Setting the logger
+logger = logging.getLogger("Habit Logger")
+logger.setLevel(logging.INFO)
+logger_console_handler = logging.StreamHandler()
+logger_console_handler.setLevel(logging.INFO)
+logger_formatter = logging.Formatter(
+     fmt="%(asctime)s - %(module)s - line %(lineno)d - %(levelname)s - %(message)s",
+     datefmt="%Y-%m-%d %H:%M:%S"
+)
+logger.addHandler(logger_console_handler)
+
+
 class Habit:
     """
     Represents a habit to be tracked.
@@ -38,9 +49,12 @@ class Habit:
 
     def complete_task(self):
         """Mark the habit as completed for the current date and time."""
-
-        self.completed_dates.append(datetime.now())
-        self.is_broken = False
+        try:
+            self.completed_dates.append(datetime.now())
+            self.is_broken = False
+            logger.info("Task completed")
+        except Exception as e:
+            logger.error(f"An unexpected error occurred: {e}", exc_info=True)
 
     def is_task_completed(self):
         """
@@ -50,19 +64,22 @@ class Habit:
             bool: True if the habit is completed within its periodicity, False otherwise.
         """
 
-        if not self.completed_dates:
-            # If there are no completion dates, check if the habit should have been completed by now
-            if self.periodicity == 'daily':
-                return (datetime.now() - self.creation_date).days < 1
-            elif self.periodicity == 'weekly':
-                return (datetime.now() - self.creation_date).days < 7
-        else:
-            # Check if the last completion date is within the required period
-            last_completion = self.completed_dates[-1]
-            if self.periodicity == 'daily':
-                return (datetime.now() - last_completion).days < 1
-            elif self.periodicity == 'weekly':
-                return (datetime.now() - last_completion).days < 7
+        try:
+            if not self.completed_dates:
+                # If there are no completion dates, check if the habit should have been completed by now
+                if self.periodicity == 'daily':
+                    return (datetime.now() - self.creation_date).days < 1
+                elif self.periodicity == 'weekly':
+                    return (datetime.now() - self.creation_date).days < 7
+            else:
+                # Check if the last completion date is within the required period
+                last_completion = self.completed_dates[-1]
+                if self.periodicity == 'daily':
+                    return (datetime.now() - last_completion).days < 1
+                elif self.periodicity == 'weekly':
+                    return (datetime.now() - last_completion).days < 7
+        except Exception as e:
+            logger.error(f"Task completed check failed: {e}", exc_info=True)
 
         return False
 
@@ -74,21 +91,24 @@ class Habit:
             bool: True if the habit is broken, False otherwise.
         """
 
-        if not self.completed_dates:
-            if self.periodicity == 'daily' and (datetime.now() - self.creation_date).days >= 1:
-                self.is_broken = True
-            elif self.periodicity == 'weekly' and (datetime.now() - self.creation_date).days >= 7:
-                self.is_broken = True
+        try:
+            if not self.completed_dates:
+                if self.periodicity == 'daily' and (datetime.now() - self.creation_date).days >= 1:
+                    self.is_broken = True
+                elif self.periodicity == 'weekly' and (datetime.now() - self.creation_date).days >= 7:
+                    self.is_broken = True
+                else:
+                    self.is_broken = False
             else:
-                self.is_broken = False
-        else:
-            last_completion = self.completed_dates[-1]
-            if self.periodicity == 'daily' and (datetime.now() - last_completion).days >= 1:
-                self.is_broken = True
-            elif self.periodicity == 'weekly' and (datetime.now() - last_completion).days >= 7:
-                self.is_broken = True
-            else:
-                self.is_broken = False
+                last_completion = self.completed_dates[-1]
+                if self.periodicity == 'daily' and (datetime.now() - last_completion).days >= 1:
+                    self.is_broken = True
+                elif self.periodicity == 'weekly' and (datetime.now() - last_completion).days >= 7:
+                    self.is_broken = True
+                else:
+                    self.is_broken = False
+        except Exception as e:
+            logger.error(f"Task failed for breaking habit: {e}", exc_info=True)
 
         return self.is_broken
 
@@ -100,22 +120,27 @@ class Habit:
             int: The number of consecutive times the habit has been completed.
         """
 
-        if not self.completed_dates: # returns 0 if self.completed_dates is 'None'
-            return 0
+        try:
+            if not self.completed_dates: # returns 0 if self.completed_dates is 'None'
+                return 0
 
-        streak = 0 # initializes 'streak' variable
-        current_date = datetime.now()
-        for completion_date in reversed(self.completed_dates):
-            if self.periodicity == 'daily':
-                if (current_date - completion_date).days <= 1:
-                    streak += 1
-                    current_date = completion_date
-                else:
-                    break
-            elif self.periodicity == 'weekly':
-                if (current_date - completion_date).days <= 7:
-                    streak += 1
-                    current_date = completion_date
-                else:
-                    break
-        return streak
+            streak = 0 # initializes 'streak' variable
+            current_date = datetime.now()
+            for completion_date in reversed(self.completed_dates):
+                if self.periodicity == 'daily':
+                    if (current_date - completion_date).days <= 1:
+                        streak += 1
+                        current_date = completion_date
+                    else:
+                        break
+                elif self.periodicity == 'weekly':
+                    if (current_date - completion_date).days <= 7:
+                        streak += 1
+                        current_date = completion_date
+                    else:
+                        break
+            return streak
+        except Exception as e:
+            logger.error(f"Task for accumulating streak failed: {e}", exc_info=True)
+
+

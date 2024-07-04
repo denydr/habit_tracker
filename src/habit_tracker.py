@@ -1,14 +1,24 @@
+import logging
 from src.habit import Habit
 
-# TODO: Add error handling (try...except)
-# TODO: Implement logging
+# Setting the logger
+logger = logging.getLogger("Habit Tracker Logger")
+logger.setLevel(logging.INFO)
+logger_console_handler = logging.StreamHandler()
+logger_console_handler.setLevel(logging.INFO)
+logger_formatter = logging.Formatter(
+     fmt="%(asctime)s - %(module)s - line %(lineno)d - %(levelname)s - %(message)s",
+     datefmt="%Y-%m-%d %H:%M:%S"
+)
+logger.addHandler(logger_console_handler)
+
 # TODO: In the readme in USAGE - Return a list of all habits with the same periodicity
 
 class HabitTracker:
     """
     Main class for tracking habits.
 
-    This class provides methods for adding, completing, and analyzing habits.
+    This class provides methods for adding, completing, analyzing and deleting habits.
     It uses a DataPersistence object to interact with the database.
     """
 
@@ -19,6 +29,7 @@ class HabitTracker:
         Args:
             db (DataPersistence): A DataPersistence object for database operations.
         """
+
         self.db = db
         self.habits = self.db.load_habits()
 
@@ -34,10 +45,15 @@ class HabitTracker:
         Returns:
             Habit: The newly created habit object.
         """
-        habit = Habit(name, description, periodicity)
-        habit.id = self.db.save_habit(habit)
-        self.habits.append(habit)
-        return habit
+
+        try:
+            habit = Habit(name, description, periodicity)
+            habit.id = self.db.save_habit(habit)
+            self.habits.append(habit)
+            return habit
+        except Exception as e:
+            logger.error(f"Task failed for adding a habit: {e}", exc_info=True)
+
 
     def complete_habit(self, habit_id):
         """
@@ -50,11 +66,14 @@ class HabitTracker:
             Habit: The completed habit object, or None if not found.
         """
 
-        habit = self.get_habit_by_id(habit_id)
-        if habit:
-            habit.complete_task()
-            self.db.update_habit(habit)
-        return habit
+        try:
+            habit = self.get_habit_by_id(habit_id)
+            if habit:
+                habit.complete_task()
+                self.db.update_habit(habit)
+            return habit
+        except Exception as e:
+            logger.error(f"Task failed for completing a habit: {e}", exc_info=True)
 
     def get_habit_by_id(self, habit_id):
         """
@@ -70,7 +89,12 @@ class HabitTracker:
         # This statement - (habit for habit in self.habits if habit.id == habit_id) - returns the iterator
         # object but not the habit object itself.
         # Therefore, next function is needed to return the actual habit object from the iterator.
-        return next((habit for habit in self.habits if habit.id == habit_id), None)
+        try:
+            return next((habit for habit in self.habits if habit.id == habit_id), None)
+        except Exception as e:
+            logger.error(f"Task failed for getting a habit by ID: {e}", exc_info=True)
+
+
 
     def get_all_habits(self):
         """
@@ -80,7 +104,11 @@ class HabitTracker:
             list: A list of all Habit objects.
         """
 
-        return self.habits
+        try:
+            return self.habits
+        except Exception as e:
+            logger.error(f"Get all habits failed: {e}", exc_info=True)
+
 
     def get_habits_by_periodicity(self, periodicity):
         """
@@ -93,7 +121,10 @@ class HabitTracker:
             list: A list of Habit objects with the given periodicity.
         """
 
-        return [habit for habit in self.habits if habit.periodicity == periodicity]
+        try:
+            return [habit for habit in self.habits if habit.periodicity == periodicity]
+        except Exception as e:
+            logger.error(f"Get habits by periodicity failed, {e}", exc_info=True)
 
     def get_longest_streak_all_habits(self):
         """
@@ -107,11 +138,15 @@ class HabitTracker:
             return 0, None
         longest_streak = 0
         longest_streak_habit = None
-        for habit in self.habits:
-            streak = habit.get_accumulated_streak()
-            if streak > longest_streak:
-                longest_streak = streak
-                longest_streak_habit = habit
+        try:
+            for habit in self.habits:
+                streak = habit.get_accumulated_streak()
+                if streak > longest_streak:
+                    longest_streak = streak
+                    longest_streak_habit = habit
+        except Exception as e:
+            logger.error(f"Get longest streak for all habits failed, {e}", exc_info=True)
+
         return longest_streak, longest_streak_habit
 
     @staticmethod
@@ -125,7 +160,11 @@ class HabitTracker:
         Returns:
             int: The longest streak for the given habit.
         """
-        return habit.get_accumulated_streak()
+
+        try:
+            return habit.get_accumulated_streak()
+        except Exception as e:
+            logger.error(f"Get longest streak for given habit failed, {e}", exc_info=True)
 
     def delete_habit(self, habit_id):
         """
@@ -137,8 +176,13 @@ class HabitTracker:
         Returns:
             Habit: The deleted habit object, or None if not found.
         """
-        habit = self.get_habit_by_id(habit_id)
-        if habit:
-            self.db.delete_habit(habit_id)
-        return habit
+
+        try:
+            habit = self.get_habit_by_id(habit_id)
+            if habit:
+                self.db.delete_habit(habit_id)
+            return habit
+        except Exception as e:
+            logger.error(f"Deleting habit_id={habit_id} failed, {e}", exc_info=True)
+
 
