@@ -92,11 +92,6 @@ class DataPersistence:
         except Exception as e:
             self.conn.rollback()
             logger.error(f"Creating tables failed, {e}", exc_info=True)
-        finally:
-            if self.cur:
-                self.cur.close()
-            if self.conn:
-                self.conn.close()
 
     def save_habit(self, habit):
         """
@@ -131,11 +126,6 @@ class DataPersistence:
         except Exception as e:
             self.conn.rollback()
             logger.error(f"Save new habit to db failed, {e}", exc_info=True)
-        finally:
-            if self.cur:
-                self.cur.close()
-            if self.conn:
-                self.conn.close()
 
     def load_habits(self):
         """
@@ -160,9 +150,6 @@ class DataPersistence:
             return habits
         except Exception as e:
             logger.error(f"Loading habits from db failed, {e}", exc_info=True)
-        finally:
-            if self.cur:
-                self.cur.close()
 
     def update_habit(self, habit):
         """
@@ -192,11 +179,6 @@ class DataPersistence:
         except Exception as e:
             self.conn.rollback()
             logger.error(f"Update existing habit in db failed, {e}", exc_info=True)
-        finally:
-            if self.cur:
-                self.cur.close()
-            if self.conn:
-                self.conn.close()
 
     def delete_habit(self, habit_id):
         """
@@ -217,11 +199,6 @@ class DataPersistence:
         except Exception as e:
             self.conn.rollback()
             logger.error(f"Delete habit from db failed, {e}", exc_info=True)
-        finally:
-            if self.cur:
-                self.cur.close()
-            if self.conn:
-                self.conn.close()
 
     def __del__(self):
         """Close the database connection when the object is destroyed."""

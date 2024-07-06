@@ -11,20 +11,13 @@ logger.setLevel(logging.INFO)
 logger_console_handler = logging.StreamHandler()
 logger_console_handler.setLevel(logging.INFO)
 logger_formatter = logging.Formatter(
-     fmt="%(asctime)s - %(module)s - line %(lineno)d - %(levelname)s - %(message)s",
-     datefmt="%Y-%m-%d %H:%M:%S"
+    fmt="%(asctime)s - %(module)s - line %(lineno)d - %(levelname)s - %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S"
 )
 logger.addHandler(logger_console_handler)
 
 # Load environment variables from .env file
 load_dotenv()
-
-# TODO: Add help command
-# TODO: Implement logging
-# TODO: Users want answers to the questions:
-#       (1) What's my longest habit streak?
-#       (1) What's the list of my current daily habits?
-#       (3) With which habits did I struggle most last month?
 
 
 class CLI:
@@ -53,34 +46,34 @@ class CLI:
             complete_parser = subparsers.add_parser("complete", help="Mark a habit as completed")
             complete_parser.add_argument("habit_id", type=int, help="ID of the habit to complete")
 
-            # List habits
-            list_parser = subparsers.add_parser("list", help="List all habits")  # noqa:
-
             # Analyze habits
             analyze_parser = subparsers.add_parser("analyze", help="Analyze habits")
+            analyze_parser.add_argument("--list", action="store_true",
+                                        help="List all currently tracked habits")
             analyze_parser.add_argument("--longest-streak", action="store_true",
                                         help="Get the longest streak for all habits")
-            analyze_parser.add_argument("--habit-id", type=int, help="Get the longest streak for a specific habit")
+            analyze_parser.add_argument("--habit-id", type=int,
+                                        help="Get the longest streak for a specific habit")
+            analyze_parser.add_argument("--daily-or-weekly", type=str,
+                                        help="Get habits by periodicity [daily|weekly]")
 
             # Delete habit
             delete_parser = subparsers.add_parser("delete", help="Delete habit by ID")
             delete_parser.add_argument("habit_id", type=int, help="ID of the habit to be deleted")
 
-            args = parser.parse_args()
+            # Custom help command
+            help_parser = subparsers.add_parser("help", help="Show help for a command")
+            help_parser.add_argument("subcommand", nargs="?", help="The subcommand to show help for")
 
-            dbname = os.getenv("DATABASE_NAME"),
-            user = os.getenv("DATABASE_USER"),
-            password = os.getenv("DATABASE_PASSWORD"),
-            host = os.getenv("DATABASE_HOST"),
-            port = os.getenv("DATABASE_PORT")
+            args = parser.parse_args()
 
             # Initialize database connection
             db = DataPersistence(
-                dbname=dbname,
-                user=user,
-                password=password,
-                host=host,
-                port=port
+                dbname=os.getenv("DATABASE_NAME"),
+                user=os.getenv("DATABASE_USER"),
+                password=os.getenv("DATABASE_PASSWORD"),
+                host=os.getenv("DATABASE_HOST"),
+                port=os.getenv("DATABASE_PORT")
             )
             habit_tracker = HabitTracker(db)
 
@@ -95,21 +88,20 @@ class CLI:
                 else:
                     print(f"Habit with ID {args.habit_id} not found")
 
-            elif args.command == "list":
-                habits = habit_tracker.get_all_habits()
-                if habits:
-                    for habit in habits:
-                        print(
-                            f"ID: {habit.id}, "
-                            f"Name: {habit.name}, "
-                            f"Periodicity: {habit.periodicity}, "
-                            f"Current Streak: {habit.get_accumulated_streak()}"
-                        )
-                else:
-                    print("No habits found")
-
             elif args.command == "analyze":
-                if args.longest_streak:
+                if args.list:
+                    habits = habit_tracker.get_all_habits()
+                    if habits:
+                        for habit in habits:
+                            print(
+                                f"ID: {habit.id}, "
+                                f"Name: {habit.name}, "
+                                f"Periodicity: {habit.periodicity}, "
+                                f"Current Streak: {habit.get_accumulated_streak()}"
+                            )
+                    else:
+                        print("No habits found")
+                elif args.longest_streak:
                     longest_streak, habit = habit_tracker.get_longest_streak_all_habits()
                     print(f"Longest streak overall: {longest_streak} (Habit: {habit.name})")
                 elif args.habit_id:
@@ -119,8 +111,13 @@ class CLI:
                         print(f"Longest streak for '{habit.name}': {longest_streak}")
                     else:
                         print(f"Habit with ID {args.habit_id} not found")
-                # TODO: return list of habits with same periodicity
-                # TODO: return a list of all currently tracked habits
+                elif args.daily_or_weekly:
+                    habits_list = habit_tracker.get_habits_by_periodicity(periodicity=args.daily_or_weekly)
+                    if len(habits_list) > 0:
+                        for habit in habits_list:
+                            print(f"{habit.name} - {habit.periodicity} habit ")
+                    else:
+                        print(f"There are no habits with {args.daily_or_weekly} periodicity")
                 else:
                     print("Please specify either --longest-streak or --habit-id")
 
@@ -130,8 +127,19 @@ class CLI:
                     print(f"Habit '{habit.name}' deleted")
                 else:
                     print(f"Habit '{habit.name}' not found")
+
+            elif args.command == "help":
+                if args.subcommand:
+                    if args.subcommand in subparsers.choices:
+                        subparsers.choices[args.subcommand].print_help()
+                    else:
+                        print(f"No help found for '{args.subcommand}'")
+                else:
+                    parser.print_help()
+
         except Exception as e:
-            logger.error(f"CLI failed, {e}", exc_info=True )
+            logger.error(f"CLI failed, {e}", exc_info=True)
+
 
 if __name__ == "__main__":
     cli = CLI()

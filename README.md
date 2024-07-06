@@ -294,29 +294,48 @@ python -m src.cli add "Habit Name" "Habit Description" [daily|weekly]
 ```shell
 python -m src.cli complete [habit_id] 
 ```  
-- `list`: List all habits  
-```shell
-python -m src.cli list 
-```  
+
+ 
 - `analyze`: Analyze habits  
 ```shell
+# List all habits
+python -m src.cli analyze --list
+
+# Show longest streak
 python -m src.cli analyze --longest-streak
-python -m src.cli analyze --habit-id [habit_id] 
+
+# Show longest streak of a habit (by ID)
+python -m src.cli analyze --habit-id [habit_id]
+
+# Get habits with same periodicity
+python -m src.cli analyze --daily-or-weekly [daily|weekly]
+ 
 ```  
 - `delete`: Delete habit by habit id 
 ```shell 
 python -m src.cli delete [habit_id] 
 ```
 
+- `help`: Show help for a command
+```shell 
+# General help message
+python -m src.cli help
 
+# Specific subcommand help
+python -m src.cli help add
+python -m src.cli help complete
+python -m src.cli help analyze
+python -m src.cli help delete
+```
 
 - Example:  
 ```shell
 python -m src.habit_tracker add "Exercise" "Do 30 minutes of exercise" daily
 python -m src.habit_tracker complete 7
-python -m src.habit_tracker list
+python -m src.cli analyze --list
 python -m src.habit_tracker analyze --longest-streak
 python -m src.habit_tracker analyze --habit-id 7
+python -m src.cli analyze --daily-or-weekly daily
 python -m src.habit_tracker delete --habit-id 7
 ```
 

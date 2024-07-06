@@ -83,35 +83,6 @@ class Habit:
 
         return False
 
-    def check_if_broken(self):
-        """
-        Check if the habit has been broken by not being completed within the defined period.
-
-        Returns:
-            bool: True if the habit is broken, False otherwise.
-        """
-
-        try:
-            if not self.completed_dates:
-                if self.periodicity == 'daily' and (datetime.now() - self.creation_date).days >= 1:
-                    self.is_broken = True
-                elif self.periodicity == 'weekly' and (datetime.now() - self.creation_date).days >= 7:
-                    self.is_broken = True
-                else:
-                    self.is_broken = False
-            else:
-                last_completion = self.completed_dates[-1]
-                if self.periodicity == 'daily' and (datetime.now() - last_completion).days >= 1:
-                    self.is_broken = True
-                elif self.periodicity == 'weekly' and (datetime.now() - last_completion).days >= 7:
-                    self.is_broken = True
-                else:
-                    self.is_broken = False
-        except Exception as e:
-            logger.error(f"Task failed for breaking habit: {e}", exc_info=True)
-
-        return self.is_broken
-
     def get_accumulated_streak(self):
         """
         Calculate the accumulated streak of completed habits.
@@ -121,10 +92,10 @@ class Habit:
         """
 
         try:
-            if not self.completed_dates: # returns 0 if self.completed_dates is 'None'
+            if not self.completed_dates:  # returns 0 if self.completed_dates is 'None'
                 return 0
 
-            streak = 0 # initializes 'streak' variable
+            streak = 0  # initializes 'streak' variable
             current_date = datetime.now()
             for completion_date in reversed(self.completed_dates):
                 if self.periodicity == 'daily':
@@ -142,5 +113,3 @@ class Habit:
             return streak
         except Exception as e:
             logger.error(f"Task for accumulating streak failed: {e}", exc_info=True)
-
-
