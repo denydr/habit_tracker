@@ -59,9 +59,8 @@ classDiagram
         +__init__(name: str, description: str, periodicity: str, id: int = None, creation_date: datetime = None)
         +complete_task()
         +is_task_completed() bool
-        +get_current_streak() int
+        +get_accumulated_streak() int
     }
-
     class HabitTracker {
         -DataPersistence db
         +__init__(db: DataPersistence)
@@ -73,7 +72,6 @@ classDiagram
         +get_longest_streak_for_habit(habit: Habit) int
         +delete_habit(habit_id: int) Habit
     }
-
     class DataPersistence {
         -str dbname
         -str user
@@ -90,64 +88,68 @@ classDiagram
         +delete_habit(habit_id: int)
         -__del__()
     }
-
     class SampleDataGenerator {
         +generate_sample_data(db: DataPersistence)
     }
-
     class CLI {
         +main()
     }
-
+    class TestHabit {
+        +test_habit_initialization(habit: Habit)
+        +test_habit_complete_task(habit: Habit)
+        +test_habit_is_task_completed_daily(habit: Habit)
+        +test_habit_is_task_completed_weekly()
+        +test_habit_get_accumulated_streak(habit: Habit)
+        +test_habit_equality(habit: Habit)
+        +test_habit_hashing(habit: Habit)
+    }
+    class TestHabitTracker {
+        +test_add_habit(habit_tracker: HabitTracker)
+        +test_complete_habit(habit_tracker: HabitTracker)
+        +test_get_habit_by_id(habit_tracker: HabitTracker)
+        +test_get_all_habits(habit_tracker: HabitTracker)
+        +test_get_habits_by_periodicity(habit_tracker: HabitTracker)
+        +test_get_longest_streak_all_habits(habit_tracker: HabitTracker)
+        +test_get_longest_streak_for_habit(habit_tracker: HabitTracker)
+        +test_habit_is_task_completed(habit_tracker: HabitTracker)
+        +test_habit_get_accumulated_streak(habit_tracker: HabitTracker)
+        +test_delete_habit_success(habit_tracker: HabitTracker)
+        +test_delete_habit_not_found(habit_tracker: HabitTracker)
+    }
+    class MockDataPersistence {
+        -list habits
+        +save_habit(habit: Habit) int
+        +load_habits() list[Habit]
+        +update_habit(habit: Habit)
+        +delete_habit(habit_id: int)
+    }
     HabitTracker o-- DataPersistence
     HabitTracker -- Habit
     SampleDataGenerator ..> DataPersistence
     SampleDataGenerator ..> Habit
     CLI ..> HabitTracker
     CLI ..> DataPersistence
+    TestHabit ..> Habit
+    TestHabitTracker ..> HabitTracker
+    TestHabitTracker ..> MockDataPersistence
+    MockDataPersistence -- DataPersistence
 ```
 This UML class diagram represents the structure and relationships between the classes in the 
-provided Python modules:  
+provided Python modules.  
+The main classes are:
+  - `Habit`,
+  - `HabitTracker`,
+  - `DataPersistence`,
+  - `SampleDataGenerator`, and
+  - `CLI`  
 
-The Habit class represents a habit to be tracked, with attributes such as id, 
-name, description, periodicity, creation_date, and completed_dates. 
-It also has methods like complete_task(), is_task_completed(), and get_current_streak().  
-The HabitTracker class contains a DataPersistence object as a dependency and provides methods 
-for adding habits, completing habits, retrieving all habits, getting a habit by ID, 
-and analyzing habits for the longest streaks.  
-The DataPersistence class handles database operations, including creating tables, 
-saving habits, loading habits, updating habits, and deleting habits. 
-It establishes a connection to the PostgreSQL database using the provided credentials.  
-
-The HabitTracker class depends on the DataPersistence class for data storage and 
-retrieval, and it also interacts with the Habit class to manage and analyze habits.  
-
-The SampleDataGenerator class has a single static method generate_sample_data, which takes 
-a DataPersistence object as an argument. This is indicated by 
-the +generate_sample_data(db: DataPersistence) method signature in the class diagram.  
-The SampleDataGenerator class has dependencies on both the DataPersistence and Habit classes, 
-as shown by the dashed arrow lines. This means that the generate_sample_data method uses 
-both of these classes to generate and insert sample data into the database.  
-The relationships between the HabitTracker, DataPersistence, and Habit classes remain 
-the same as in the previous diagrams.  
-The main block of the sample_data.py module is not represented in the class diagram 
-since it is not part of the class structure. However, it creates an instance of the 
-SampleDataGenerator class and calls the generate_sample_data method, passing a 
-DataPersistence object as an argument.  
-
-The CLI class has a single static method main, which is the entry point for the command-line interface. 
-This method sets up the argument parser, initializes the database connection, and handles the 
-different commands for interacting with the Habit Tracker.  
-The CLI class has dependencies on both the HabitTracker and DataPersistence classes, 
-as shown by the dashed arrow lines. This means that the main method uses these classes to perform the
-requested actions based on the user's command-line arguments.  
-The main method creates an instance of the DataPersistence class to establish a database connection 
-and an instance of the HabitTracker class to interact with the habits and their data.  
-The relationships between the HabitTracker, DataPersistence, Habit, and SampleDataGenerator classes 
-remain the same as in the previous diagrams.  
-This updated UML class diagram provides a comprehensive overview of the structure and relationships 
-of the classes in the modified cli.py module and how it interacts with the other classes in the 
-Habit Tracker application.
+The `HabitTracker` class manages habits and uses the `DataPersistence` class 
+for data storage.  
+The `CLI` class interacts with the `HabitTracker` and `DataPersistence` classes 
+to provide the user interface.  
+The `SampleDataGenerator` class generates sample data for demonstration purposes.  
+The `TestHabit` and `TestHabitTracker` labels depict the `test_habit.py` and `test_habit_tracker.py` modules.  
+They contain the unit tests for the `Habit` and `HabitTracker` classes, respectively.  
 
 
 ## Development
@@ -155,8 +157,8 @@ Habit Tracker application.
 - The `src` directory contains the main application code.  
 - The `tests` directory contains the test suite.  
 - The `docs` directory contains the Sphinx documentation files. 
-- The `source` directory contains the adjustments for Sphinx documentation files generation.
-- The `build` directory contains the generated Sphinx documentation files.
+- The `source` directory contains the configuration files for documentation generation.
+- The `build` directory contains the generated documentation files by Sphinx.
 
 where:  
 
@@ -388,18 +390,14 @@ cd docs
 sphinx-quickstart
 ```  
 
-3. Build main mapping
-```shell
-sphinx-apidoc -o docs1 ~/PycharmProjects/habit_tracker/
-```  
-4. Build the HTML documentation:  
+3. Build the HTML documentation:  
 
 ```shell
 make clean 
 make html
 ```  
 
-5. Open the generated documentation in your browser:  
+4. Open the generated documentation in your browser:  
 
 ```shell
 open build/html/index.html
