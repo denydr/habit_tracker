@@ -405,8 +405,4 @@ open build/html/index.html
 
 ## Contributing
 
-Feel free to submit issues and pull requests for new features or bug fixes.
-
-## License
-
-This project is licensed under the MIT License.  
+Feel free to submit issues and pull requests for new features or bug fixes.  
