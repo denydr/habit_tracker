@@ -1,6 +1,10 @@
-import pytest
 from datetime import datetime, timedelta
-from src.habit_tracker import HabitTracker
+import os
+import pytest
+import sys
+src_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src'))
+sys.path.insert(0, src_path)
+from habit_tracker import HabitTracker   # noqa:
 
 
 class MockDataPersistence:

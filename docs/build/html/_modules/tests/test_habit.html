@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tests.test_habit &mdash; Habit Tracker Project 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=d45e8c67"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Habit Tracker Project
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../cli.html">CLI Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../data_persistence.html">Data Persistence Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../habit.html">Habit Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../habit_tracker.html">Habit Tracker Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../sample_data.html">Sample Data Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../test_habit.html">Test Habit Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../test_habit_tracker.html">Test Habit Tracker Module</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Habit Tracker Project</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">tests.test_habit</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for tests.test_habit</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">pytest</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+<span class="kn">from</span> <span class="nn">src.habit_tracker</span> <span class="kn">import</span> <span class="n">Habit</span>
+
+
+<div class="viewcode-block" id="habit">
+<a class="viewcode-back" href="../../test_habit.html#tests.test_habit.habit">[docs]</a>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+<span class="k">def</span> <span class="nf">habit</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Pytest fixture for creating a Habit instance.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Habit: An instance of the Habit class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">Habit</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Exercise&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Do 30 minutes of exercise&quot;</span><span class="p">,</span> <span class="n">periodicity</span><span class="o">=</span><span class="s2">&quot;daily&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="test_habit_initialization">
+<a class="viewcode-back" href="../../test_habit.html#tests.test_habit.test_habit_initialization">[docs]</a>
+<span class="k">def</span> <span class="nf">test_habit_initialization</span><span class="p">(</span><span class="n">habit</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Test the initialization of a new Habit object.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        habit (Habit): The habit instance to use for the test.</span>
+
+<span class="sd">    Asserts:</span>
+<span class="sd">        The habit is initialized with the correct attributes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">assert</span> <span class="n">habit</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;Exercise&quot;</span>
+    <span class="k">assert</span> <span class="n">habit</span><span class="o">.</span><span class="n">description</span> <span class="o">==</span> <span class="s2">&quot;Do 30 minutes of exercise&quot;</span>
+    <span class="k">assert</span> <span class="n">habit</span><span class="o">.</span><span class="n">periodicity</span> <span class="o">==</span> <span class="s2">&quot;daily&quot;</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">habit</span><span class="o">.</span><span class="n">creation_date</span><span class="p">,</span> <span class="n">datetime</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">habit</span><span class="o">.</span><span class="n">completed_dates</span> <span class="o">==</span> <span class="p">[]</span></div>
+
+
+
+<div class="viewcode-block" id="test_habit_complete_task">
+<a class="viewcode-back" href="../../test_habit.html#tests.test_habit.test_habit_complete_task">[docs]</a>
+<span class="k">def</span> <span class="nf">test_habit_complete_task</span><span class="p">(</span><span class="n">habit</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Test marking a habit as completed.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        habit (Habit): The habit instance to use for the test.</span>
+
+<span class="sd">    Asserts:</span>
+<span class="sd">        The habit is marked as completed and the completion date is recorded.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">initial_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">habit</span><span class="o">.</span><span class="n">completed_dates</span><span class="p">)</span>
+    <span class="n">habit</span><span class="o">.</span><span class="n">complete_task</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">habit</span><span class="o">.</span><span class="n">completed_dates</span><span class="p">)</span> <span class="o">==</span> <span class="n">initial_length</span> <span class="o">+</span> <span class="mi">1</span></div>
+
+
+
+<div class="viewcode-block" id="test_habit_is_task_completed_daily">
+<a class="viewcode-back" href="../../test_habit.html#tests.test_habit.test_habit_is_task_completed_daily">[docs]</a>
+<span class="k">def</span> <span class="nf">test_habit_is_task_completed_daily</span><span class="p">(</span><span class="n">habit</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Test checking if a daily habit is completed.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        habit (Habit): The habit instance to use for the test.</span>
+
+<span class="sd">    Asserts:</span>
+<span class="sd">        The task completion status of a daily habit is correctly identified.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">habit</span><span class="o">.</span><span class="n">is_task_completed</span><span class="p">():</span>
+        <span class="k">assert</span> <span class="ow">not</span> <span class="n">habit</span><span class="o">.</span><span class="n">is_task_completed</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">habit</span><span class="o">.</span><span class="n">complete_task</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="n">habit</span><span class="o">.</span><span class="n">is_task_completed</span><span class="p">()</span>
+
+    <span class="c1"># Set completion date to yesterday</span>
+    <span class="n">habit</span><span class="o">.</span><span class="n">completed_dates</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="ow">not</span> <span class="n">habit</span><span class="o">.</span><span class="n">is_task_completed</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="test_habit_is_task_completed_weekly">
+<a class="viewcode-back" href="../../test_habit.html#tests.test_habit.test_habit_is_task_completed_weekly">[docs]</a>
+<span class="k">def</span> <span class="nf">test_habit_is_task_completed_weekly</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Test checking if a weekly habit is completed.</span>
+
+<span class="sd">    Asserts:</span>
+<span class="sd">        The task completion status of a weekly habit is correctly identified.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">habit</span> <span class="o">=</span> <span class="n">Habit</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Clean&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Clean the house&quot;</span><span class="p">,</span> <span class="n">periodicity</span><span class="o">=</span><span class="s2">&quot;weekly&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">habit</span><span class="o">.</span><span class="n">is_task_completed</span><span class="p">():</span>
+        <span class="k">assert</span> <span class="ow">not</span> <span class="n">habit</span><span class="o">.</span><span class="n">is_task_completed</span><span class="p">()</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">habit</span><span class="o">.</span><span class="n">complete_task</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="n">habit</span><span class="o">.</span><span class="n">is_task_completed</span><span class="p">()</span>
+
+    <span class="c1"># Set completion date to 8 days ago</span>
+    <span class="n">habit</span><span class="o">.</span><span class="n">completed_dates</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="ow">not</span> <span class="n">habit</span><span class="o">.</span><span class="n">is_task_completed</span><span class="p">()</span>  <span class="c1"># Should not be completed as a week has passed</span></div>
+
+
+
+<div class="viewcode-block" id="test_habit_get_accumulated_streak">
+<a class="viewcode-back" href="../../test_habit.html#tests.test_habit.test_habit_get_accumulated_streak">[docs]</a>
+<span class="k">def</span> <span class="nf">test_habit_get_accumulated_streak</span><span class="p">(</span><span class="n">habit</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Test getting the accumulated streak for a habit.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        habit (Habit): The habit instance to use for the test.</span>
+
+<span class="sd">    Asserts:</span>
+<span class="sd">        The accumulated streak for a habit is correctly calculated.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">assert</span> <span class="n">habit</span><span class="o">.</span><span class="n">get_accumulated_streak</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span>
+
+    <span class="c1"># Complete habit for 3 consecutive days</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+        <span class="n">habit</span><span class="o">.</span><span class="n">complete_task</span><span class="p">()</span>
+        <span class="n">habit</span><span class="o">.</span><span class="n">creation_date</span> <span class="o">-=</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">assert</span> <span class="n">habit</span><span class="o">.</span><span class="n">get_accumulated_streak</span><span class="p">()</span> <span class="o">==</span> <span class="mi">3</span></div>
+
+
+
+<div class="viewcode-block" id="test_habit_equality">
+<a class="viewcode-back" href="../../test_habit.html#tests.test_habit.test_habit_equality">[docs]</a>
+<span class="k">def</span> <span class="nf">test_habit_equality</span><span class="p">(</span><span class="n">habit</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Test the equality comparison for Habit objects.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        habit (Habit): The habit instance to use for the test.</span>
+
+<span class="sd">    Asserts:</span>
+<span class="sd">        Two Habit objects with the same ID are considered equal.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">habit2</span> <span class="o">=</span> <span class="n">Habit</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Exercise&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Do 30 minutes of exercise&quot;</span><span class="p">,</span> <span class="n">periodicity</span><span class="o">=</span><span class="s2">&quot;daily&quot;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="n">habit</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">habit</span> <span class="o">==</span> <span class="n">habit2</span></div>
+
+
+
+<div class="viewcode-block" id="test_habit_hashing">
+<a class="viewcode-back" href="../../test_habit.html#tests.test_habit.test_habit_hashing">[docs]</a>
+<span class="k">def</span> <span class="nf">test_habit_hashing</span><span class="p">(</span><span class="n">habit</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Test the hashing functionality for Habit objects.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        habit (Habit): The habit instance to use for the test.</span>
+
+<span class="sd">    Asserts:</span>
+<span class="sd">        The hash of a Habit object is based on its ID.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">habit</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">habit2</span> <span class="o">=</span> <span class="n">Habit</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Exercise&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Do 30 minutes of exercise&quot;</span><span class="p">,</span> <span class="n">periodicity</span><span class="o">=</span><span class="s2">&quot;daily&quot;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">hash</span><span class="p">(</span><span class="n">habit</span><span class="p">)</span> <span class="o">==</span> <span class="nb">hash</span><span class="p">(</span><span class="n">habit2</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># Run the tests</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">pytest</span><span class="o">.</span><span class="n">main</span><span class="p">([</span><span class="vm">__file__</span><span class="p">])</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Denitsa Draganova.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -347,6 +347,9 @@ To run the tests, use the following command:
 ```shell
 pytest tests/test_habit_tracker.py
 ```  
+```shell
+pytest tests/test_habit.py
+```  
 
 ## Generating Documentation
 
@@ -364,13 +367,18 @@ cd docs
 sphinx-quickstart
 ```  
 
-3. Build the HTML documentation:  
+3. Build main mapping
+```shell
+sphinx-apidoc -o docs1 ~/PycharmProjects/habit_tracker/
+```  
+4. Build the HTML documentation:  
 
 ```shell
+make clean 
 make html
 ```  
 
-4. Open the generated documentation in your browser:  
+5. Open the generated documentation in your browser:  
 
 ```shell
 open build/html/index.html

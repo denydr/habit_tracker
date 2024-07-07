@@ -1,7 +1,7 @@
 Habit Module
 ============
 
-.. automodule:: habit
+.. automodule:: src.habit
    :members:
    :undoc-members:
    :show-inheritance:

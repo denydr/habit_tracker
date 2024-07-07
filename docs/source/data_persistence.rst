@@ -1,7 +1,7 @@
 Data Persistence Module
 =======================
 
-.. automodule:: data_persistence
+.. automodule:: src.data_persistence
    :members:
    :undoc-members:
    :show-inheritance:

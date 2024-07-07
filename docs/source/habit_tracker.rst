@@ -1,7 +1,7 @@
 Habit Tracker Module
 ====================
 
-.. automodule:: habit_tracker
+.. automodule:: src.habit_tracker
    :members:
    :undoc-members:
    :show-inheritance:

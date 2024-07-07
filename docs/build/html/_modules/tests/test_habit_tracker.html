@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tests.test_habit_tracker &mdash; Habit Tracker Project 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=d45e8c67"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Habit Tracker Project
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../cli.html">CLI Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../data_persistence.html">Data Persistence Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../habit.html">Habit Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../habit_tracker.html">Habit Tracker Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../sample_data.html">Sample Data Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../test_habit.html">Test Habit Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../test_habit_tracker.html">Test Habit Tracker Module</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Habit Tracker Project</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">tests.test_habit_tracker</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for tests.test_habit_tracker</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">pytest</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+<span class="kn">from</span> <span class="nn">src.habit_tracker</span> <span class="kn">import</span> <span class="n">HabitTracker</span>
+
+
+<div class="viewcode-block" id="MockDataPersistence">
+<a class="viewcode-back" href="../../test_habit_tracker.html#tests.test_habit_tracker.MockDataPersistence">[docs]</a>
+<span class="k">class</span> <span class="nc">MockDataPersistence</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class for testing data persistence.</span>
+<span class="sd">    This class simulates the behavior of the DataPersistence class,</span>
+<span class="sd">    allowing for testing without a real database.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the MockDataPersistence.</span>
+<span class="sd">        Creates an empty list to store habits.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">habits</span> <span class="o">=</span> <span class="p">[]</span>
+
+<div class="viewcode-block" id="MockDataPersistence.save_habit">
+<a class="viewcode-back" href="../../test_habit_tracker.html#tests.test_habit_tracker.MockDataPersistence.save_habit">[docs]</a>
+    <span class="k">def</span> <span class="nf">save_habit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">habit</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Save a habit.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            habit (Habit): The habit object to be saved.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            int: The ID of the saved habit.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">habit</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">habits</span><span class="p">):</span>
+            <span class="n">habit</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">habits</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">habits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">habit</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">habit</span><span class="o">.</span><span class="n">id</span></div>
+
+
+<div class="viewcode-block" id="MockDataPersistence.load_habits">
+<a class="viewcode-back" href="../../test_habit_tracker.html#tests.test_habit_tracker.MockDataPersistence.load_habits">[docs]</a>
+    <span class="k">def</span> <span class="nf">load_habits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load all habits.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">                list: A copy of the list of all habit objects.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">habits</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="MockDataPersistence.update_habit">
+<a class="viewcode-back" href="../../test_habit_tracker.html#tests.test_habit_tracker.MockDataPersistence.update_habit">[docs]</a>
+    <span class="k">def</span> <span class="nf">update_habit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">habit</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update a habit.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            habit (Habit): The habit object with updated data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">h</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">habits</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">h</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">habit</span><span class="o">.</span><span class="n">id</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">habits</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">habit</span>
+                <span class="k">break</span></div>
+
+
+<div class="viewcode-block" id="MockDataPersistence.delete_habit">
+<a class="viewcode-back" href="../../test_habit_tracker.html#tests.test_habit_tracker.MockDataPersistence.delete_habit">[docs]</a>
+    <span class="k">def</span> <span class="nf">delete_habit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">habit_id</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Delete a habit.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            habit_id (int): The ID of the habit to be deleted.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">habits</span> <span class="o">=</span> <span class="p">[</span><span class="n">h</span> <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">habits</span> <span class="k">if</span> <span class="n">h</span><span class="o">.</span><span class="n">id</span> <span class="o">!=</span> <span class="n">habit_id</span><span class="p">]</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="mock_db">
+<a class="viewcode-back" href="../../test_habit_tracker.html#tests.test_habit_tracker.mock_db">[docs]</a>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+<span class="k">def</span> <span class="nf">mock_db</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Pytest fixture for creating a mock database instance.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">            MockDataPersistence: An instance of the mock data persistence class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">MockDataPersistence</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="habit_tracker">
+<a class="viewcode-back" href="../../test_habit_tracker.html#tests.test_habit_tracker.habit_tracker">[docs]</a>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+<span class="k">def</span> <span class="nf">habit_tracker</span><span class="p">(</span><span class="n">mock_db</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Pytest fixture for creating a HabitTracker instance with a mock database.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        mock_db (MockDataPersistence): The mock data persistence instance.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        HabitTracker: An instance of the HabitTracker class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">HabitTracker</span><span class="p">(</span><span class="n">mock_db</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="test_add_habit">
+<a class="viewcode-back" href="../../test_habit_tracker.html#tests.test_habit_tracker.test_add_habit">[docs]</a>
+<span class="k">def</span> <span class="nf">test_add_habit</span><span class="p">(</span><span class="n">habit_tracker</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Test adding a new habit to the HabitTracker.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        habit_tracker (HabitTracker): The habit tracker instance to use for the test.</span>
+
+<span class="sd">    Asserts:</span>
+<span class="sd">        The habit is added successfully with the correct attributes,</span>
+<span class="sd">        and the total number of habits in the tracker is as expected.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">habit</span> <span class="o">=</span> <span class="n">habit_tracker</span><span class="o">.</span><span class="n">add_habit</span><span class="p">(</span><span class="s2">&quot;Exercise&quot;</span><span class="p">,</span> <span class="s2">&quot;Do 30 minutes of exercise&quot;</span><span class="p">,</span> <span class="s2">&quot;daily&quot;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">habit</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="mi">1</span>
+    <span class="k">assert</span> <span class="n">habit</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;Exercise&quot;</span>
+    <span class="k">assert</span> <span class="n">habit</span><span class="o">.</span><span class="n">description</span> <span class="o">==</span> <span class="s2">&quot;Do 30 minutes of exercise&quot;</span>
+    <span class="k">assert</span> <span class="n">habit</span><span class="o">.</span><span class="n">periodicity</span> <span class="o">==</span> <span class="s2">&quot;daily&quot;</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">habit_tracker</span><span class="o">.</span><span class="n">habits</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span></div>
+
+
+
+<div class="viewcode-block" id="test_complete_habit">
+<a class="viewcode-back" href="../../test_habit_tracker.html#tests.test_habit_tracker.test_complete_habit">[docs]</a>
+<span class="k">def</span> <span class="nf">test_complete_habit</span><span class="p">(</span><span class="n">habit_tracker</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Test completing a habit in the HabitTracker.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        habit_tracker (HabitTracker): The habit tracker instance to use for the test.</span>
+
+<span class="sd">    Asserts:</span>
+<span class="sd">        The habit is marked as completed and the completion date is recorded.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">habit</span> <span class="o">=</span> <span class="n">habit_tracker</span><span class="o">.</span><span class="n">add_habit</span><span class="p">(</span><span class="s2">&quot;Exercise&quot;</span><span class="p">,</span> <span class="s2">&quot;Do 30 minutes of exercise&quot;</span><span class="p">,</span> <span class="s2">&quot;daily&quot;</span><span class="p">)</span>
+    <span class="n">completed_habit</span> <span class="o">=</span> <span class="n">habit_tracker</span><span class="o">.</span><span class="n">complete_habit</span><span class="p">(</span><span class="n">habit</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">completed_habit</span><span class="o">.</span><span class="n">is_task_completed</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">completed_habit</span><span class="o">.</span><span class="n">completed_dates</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span></div>
+
+
+
+<div class="viewcode-block" id="test_get_habit_by_id">
+<a class="viewcode-back" href="../../test_habit_tracker.html#tests.test_habit_tracker.test_get_habit_by_id">[docs]</a>
+<span class="k">def</span> <span class="nf">test_get_habit_by_id</span><span class="p">(</span><span class="n">habit_tracker</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Test retrieving a habit by its ID from the HabitTracker.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">         habit_tracker (HabitTracker): The habit tracker instance to use for the test.</span>
+
+<span class="sd">    Asserts:</span>
+<span class="sd">       The habit is retrieved correctly by its ID.</span>
+<span class="sd">       Returns None for a non-existent habit ID.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">habit1</span> <span class="o">=</span> <span class="n">habit_tracker</span><span class="o">.</span><span class="n">add_habit</span><span class="p">(</span><span class="s2">&quot;Exercise&quot;</span><span class="p">,</span> <span class="s2">&quot;Do 30 minutes of exercise&quot;</span><span class="p">,</span> <span class="s2">&quot;daily&quot;</span><span class="p">)</span>
+    <span class="n">habit2</span> <span class="o">=</span> <span class="n">habit_tracker</span><span class="o">.</span><span class="n">add_habit</span><span class="p">(</span><span class="s2">&quot;Read&quot;</span><span class="p">,</span> <span class="s2">&quot;Read for 30 minutes&quot;</span><span class="p">,</span> <span class="s2">&quot;daily&quot;</span><span class="p">)</span>
+
+    <span class="k">assert</span> <span class="n">habit_tracker</span><span class="o">.</span><span class="n">get_habit_by_id</span><span class="p">(</span><span class="n">habit1</span><span class="o">.</span><span class="n">id</span><span class="p">)</span> <span class="o">==</span> <span class="n">habit1</span>
+    <span class="k">assert</span> <span class="n">habit_tracker</span><span class="o">.</span><span class="n">get_habit_by_id</span><span class="p">(</span><span class="n">habit2</span><span class="o">.</span><span class="n">id</span><span class="p">)</span> <span class="o">==</span> <span class="n">habit2</span>
+    <span class="k">assert</span> <span class="n">habit_tracker</span><span class="o">.</span><span class="n">get_habit_by_id</span><span class="p">(</span><span class="mi">999</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="test_get_all_habits">
+<a class="viewcode-back" href="../../test_habit_tracker.html#tests.test_habit_tracker.test_get_all_habits">[docs]</a>
+<span class="k">def</span> <span class="nf">test_get_all_habits</span><span class="p">(</span><span class="n">habit_tracker</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Test retrieving all habits from the HabitTracker.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        habit_tracker (HabitTracker): The habit tracker instance to use for the test.</span>
+
+<span class="sd">    Asserts:</span>
+<span class="sd">        All habits added to the tracker are retrieved correctly.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">habit1</span> <span class="o">=</span> <span class="n">habit_tracker</span><span class="o">.</span><span class="n">add_habit</span><span class="p">(</span><span class="s2">&quot;Exercise&quot;</span><span class="p">,</span> <span class="s2">&quot;Do 30 minutes of exercise&quot;</span><span class="p">,</span> <span class="s2">&quot;daily&quot;</span><span class="p">)</span>
+    <span class="n">habit2</span> <span class="o">=</span> <span class="n">habit_tracker</span><span class="o">.</span><span class="n">add_habit</span><span class="p">(</span><span class="s2">&quot;Read&quot;</span><span class="p">,</span> <span class="s2">&quot;Read for 30 minutes&quot;</span><span class="p">,</span> <span class="s2">&quot;daily&quot;</span><span class="p">)</span>
+
+    <span class="n">all_habits</span> <span class="o">=</span> <span class="n">habit_tracker</span><span class="o">.</span><span class="n">get_all_habits</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_habits</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+    <span class="k">assert</span> <span class="n">habit1</span> <span class="ow">in</span> <span class="n">all_habits</span>
+    <span class="k">assert</span> <span class="n">habit2</span> <span class="ow">in</span> <span class="n">all_habits</span></div>
+
+
+
+<div class="viewcode-block" id="test_get_habits_by_periodicity">
+<a class="viewcode-back" href="../../test_habit_tracker.html#tests.test_habit_tracker.test_get_habits_by_periodicity">[docs]</a>
+<span class="k">def</span> <span class="nf">test_get_habits_by_periodicity</span><span class="p">(</span><span class="n">habit_tracker</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Test retrieving habits by their periodicity from the HabitTracker.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">         habit_tracker (HabitTracker): The habit tracker instance to use for the test.</span>
+
+<span class="sd">    Asserts:</span>
+<span class="sd">        Habits are correctly filtered and retrieved by their periodicity.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">habit1</span> <span class="o">=</span> <span class="n">habit_tracker</span><span class="o">.</span><span class="n">add_habit</span><span class="p">(</span><span class="s2">&quot;Exercise&quot;</span><span class="p">,</span> <span class="s2">&quot;Do 30 minutes of exercise&quot;</span><span class="p">,</span> <span class="s2">&quot;daily&quot;</span><span class="p">)</span>
+    <span class="n">habit2</span> <span class="o">=</span> <span class="n">habit_tracker</span><span class="o">.</span><span class="n">add_habit</span><span class="p">(</span><span class="s2">&quot;Read&quot;</span><span class="p">,</span> <span class="s2">&quot;Read for 30 minutes&quot;</span><span class="p">,</span> <span class="s2">&quot;daily&quot;</span><span class="p">)</span>
+    <span class="n">habit3</span> <span class="o">=</span> <span class="n">habit_tracker</span><span class="o">.</span><span class="n">add_habit</span><span class="p">(</span><span class="s2">&quot;Clean&quot;</span><span class="p">,</span> <span class="s2">&quot;Clean the house&quot;</span><span class="p">,</span> <span class="s2">&quot;weekly&quot;</span><span class="p">)</span>
+
+    <span class="n">daily_habits</span> <span class="o">=</span> <span class="n">habit_tracker</span><span class="o">.</span><span class="n">get_habits_by_periodicity</span><span class="p">(</span><span class="s2">&quot;daily&quot;</span><span class="p">)</span>
+    <span class="n">weekly_habits</span> <span class="o">=</span> <span class="n">habit_tracker</span><span class="o">.</span><span class="n">get_habits_by_periodicity</span><span class="p">(</span><span class="s2">&quot;weekly&quot;</span><span class="p">)</span>
+
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">daily_habits</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+    <span class="k">assert</span> <span class="n">habit1</span> <span class="ow">in</span> <span class="n">daily_habits</span>
+    <span class="k">assert</span> <span class="n">habit2</span> <span class="ow">in</span> <span class="n">daily_habits</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">weekly_habits</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+    <span class="k">assert</span> <span class="n">habit3</span> <span class="ow">in</span> <span class="n">weekly_habits</span></div>
+
+
+
+<div class="viewcode-block" id="test_get_longest_streak_all_habits">
+<a class="viewcode-back" href="../../test_habit_tracker.html#tests.test_habit_tracker.test_get_longest_streak_all_habits">[docs]</a>
+<span class="k">def</span> <span class="nf">test_get_longest_streak_all_habits</span><span class="p">(</span><span class="n">habit_tracker</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Test retrieving the longest streak across all habits in the HabitTracker.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">         habit_tracker (HabitTracker): The habit tracker instance to use for the test.</span>
+
+<span class="sd">    Asserts:</span>
+<span class="sd">       The longest streak and corresponding habit are correctly identified.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">habit1</span> <span class="o">=</span> <span class="n">habit_tracker</span><span class="o">.</span><span class="n">add_habit</span><span class="p">(</span><span class="s2">&quot;Exercise&quot;</span><span class="p">,</span> <span class="s2">&quot;Do 30 minutes of exercise&quot;</span><span class="p">,</span> <span class="s2">&quot;daily&quot;</span><span class="p">)</span>
+    <span class="n">habit2</span> <span class="o">=</span> <span class="n">habit_tracker</span><span class="o">.</span><span class="n">add_habit</span><span class="p">(</span><span class="s2">&quot;Read&quot;</span><span class="p">,</span> <span class="s2">&quot;Read for 30 minutes&quot;</span><span class="p">,</span> <span class="s2">&quot;daily&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Complete habit1 for 3 days</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+        <span class="n">habit_tracker</span><span class="o">.</span><span class="n">complete_habit</span><span class="p">(</span><span class="n">habit1</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="n">habit1</span><span class="o">.</span><span class="n">creation_date</span> <span class="o">-=</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Complete habit2 for 5 days</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+        <span class="n">habit_tracker</span><span class="o">.</span><span class="n">complete_habit</span><span class="p">(</span><span class="n">habit2</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="n">habit2</span><span class="o">.</span><span class="n">creation_date</span> <span class="o">-=</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">longest_streak</span><span class="p">,</span> <span class="n">longest_streak_habit</span> <span class="o">=</span> <span class="n">habit_tracker</span><span class="o">.</span><span class="n">get_longest_streak_all_habits</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="n">longest_streak</span> <span class="o">==</span> <span class="mi">5</span>
+    <span class="k">assert</span> <span class="n">longest_streak_habit</span> <span class="o">==</span> <span class="n">habit2</span></div>
+
+
+
+<div class="viewcode-block" id="test_get_longest_streak_for_habit">
+<a class="viewcode-back" href="../../test_habit_tracker.html#tests.test_habit_tracker.test_get_longest_streak_for_habit">[docs]</a>
+<span class="k">def</span> <span class="nf">test_get_longest_streak_for_habit</span><span class="p">(</span><span class="n">habit_tracker</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Test retrieving the longest streak for a specific habit in the HabitTracker.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        habit_tracker (HabitTracker): The habit tracker instance to use for the test.</span>
+
+<span class="sd">    Asserts:</span>
+<span class="sd">        The longest streak for the specified habit is correctly identified.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">habit</span> <span class="o">=</span> <span class="n">habit_tracker</span><span class="o">.</span><span class="n">add_habit</span><span class="p">(</span><span class="s2">&quot;Exercise&quot;</span><span class="p">,</span> <span class="s2">&quot;Do 30 minutes of exercise&quot;</span><span class="p">,</span> <span class="s2">&quot;daily&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Complete habit for 3 days</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+        <span class="n">habit_tracker</span><span class="o">.</span><span class="n">complete_habit</span><span class="p">(</span><span class="n">habit</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="n">habit</span><span class="o">.</span><span class="n">creation_date</span> <span class="o">-=</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">longest_streak</span> <span class="o">=</span> <span class="n">habit_tracker</span><span class="o">.</span><span class="n">get_longest_streak_for_habit</span><span class="p">(</span><span class="n">habit</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">longest_streak</span> <span class="o">==</span> <span class="mi">3</span></div>
+
+
+
+<div class="viewcode-block" id="test_habit_is_task_completed">
+<a class="viewcode-back" href="../../test_habit_tracker.html#tests.test_habit_tracker.test_habit_is_task_completed">[docs]</a>
+<span class="k">def</span> <span class="nf">test_habit_is_task_completed</span><span class="p">(</span><span class="n">habit_tracker</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Test checking if a task is completed for a habit in the HabitTracker.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        habit_tracker (HabitTracker): The habit tracker instance to use for the test.</span>
+
+<span class="sd">    Asserts:</span>
+<span class="sd">        The task completion status of a habit is correctly identified.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">habit</span> <span class="o">=</span> <span class="n">habit_tracker</span><span class="o">.</span><span class="n">add_habit</span><span class="p">(</span><span class="s2">&quot;Exercise&quot;</span><span class="p">,</span> <span class="s2">&quot;Do 30 minutes of exercise&quot;</span><span class="p">,</span> <span class="s2">&quot;daily&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">habit</span><span class="o">.</span><span class="n">is_task_completed</span><span class="p">():</span>
+        <span class="k">assert</span> <span class="ow">not</span> <span class="n">habit</span><span class="o">.</span><span class="n">is_task_completed</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">habit_tracker</span><span class="o">.</span><span class="n">complete_habit</span><span class="p">(</span><span class="n">habit</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">habit</span><span class="o">.</span><span class="n">is_task_completed</span><span class="p">()</span>
+
+    <span class="c1"># Set completion date to yesterday</span>
+    <span class="n">habit</span><span class="o">.</span><span class="n">completed_dates</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="ow">not</span> <span class="n">habit</span><span class="o">.</span><span class="n">is_task_completed</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="test_habit_get_accumulated_streak">
+<a class="viewcode-back" href="../../test_habit_tracker.html#tests.test_habit_tracker.test_habit_get_accumulated_streak">[docs]</a>
+<span class="k">def</span> <span class="nf">test_habit_get_accumulated_streak</span><span class="p">(</span><span class="n">habit_tracker</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Test getting the accumulated streak for a habit in the HabitTracker.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        habit_tracker (HabitTracker): The habit tracker instance to use for the test.</span>
+
+<span class="sd">    Asserts:</span>
+<span class="sd">        The accumulated streak for a habit is correctly calculated.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">habit</span> <span class="o">=</span> <span class="n">habit_tracker</span><span class="o">.</span><span class="n">add_habit</span><span class="p">(</span><span class="s2">&quot;Exercise&quot;</span><span class="p">,</span> <span class="s2">&quot;Do 30 minutes of exercise&quot;</span><span class="p">,</span> <span class="s2">&quot;daily&quot;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">habit</span><span class="o">.</span><span class="n">get_accumulated_streak</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span>
+
+    <span class="c1"># Complete habit for 3 consecutive days</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+        <span class="n">habit_tracker</span><span class="o">.</span><span class="n">complete_habit</span><span class="p">(</span><span class="n">habit</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="n">habit</span><span class="o">.</span><span class="n">creation_date</span> <span class="o">-=</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">assert</span> <span class="n">habit</span><span class="o">.</span><span class="n">get_accumulated_streak</span><span class="p">()</span> <span class="o">==</span> <span class="mi">3</span></div>
+
+
+
+<div class="viewcode-block" id="test_delete_habit_success">
+<a class="viewcode-back" href="../../test_habit_tracker.html#tests.test_habit_tracker.test_delete_habit_success">[docs]</a>
+<span class="k">def</span> <span class="nf">test_delete_habit_success</span><span class="p">(</span><span class="n">habit_tracker</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Test deleting an existing habit from the HabitTracker.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        habit_tracker (HabitTracker): The habit tracker instance to use for the test.</span>
+
+<span class="sd">    Asserts:</span>
+<span class="sd">        The habit is deleted successfully and is no longer present in the list of habits.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">habit</span> <span class="o">=</span> <span class="n">habit_tracker</span><span class="o">.</span><span class="n">add_habit</span><span class="p">(</span><span class="s2">&quot;Exercise&quot;</span><span class="p">,</span> <span class="s2">&quot;Do 30 minutes of exercise&quot;</span><span class="p">,</span> <span class="s2">&quot;daily&quot;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">habit_tracker</span><span class="o">.</span><span class="n">habits</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+
+    <span class="n">deleted_habit</span> <span class="o">=</span> <span class="n">habit_tracker</span><span class="o">.</span><span class="n">delete_habit</span><span class="p">(</span><span class="n">habit</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">deleted_habit</span> <span class="o">==</span> <span class="n">habit</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">habit_tracker</span><span class="o">.</span><span class="n">habits</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+    <span class="k">assert</span> <span class="n">habit_tracker</span><span class="o">.</span><span class="n">get_habit_by_id</span><span class="p">(</span><span class="n">habit</span><span class="o">.</span><span class="n">id</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="test_delete_habit_not_found">
+<a class="viewcode-back" href="../../test_habit_tracker.html#tests.test_habit_tracker.test_delete_habit_not_found">[docs]</a>
+<span class="k">def</span> <span class="nf">test_delete_habit_not_found</span><span class="p">(</span><span class="n">habit_tracker</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Test attempting to delete a habit that does not exist in the HabitTracker.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        habit_tracker (HabitTracker): The habit tracker instance to use for the test.</span>
+
+<span class="sd">    Asserts:</span>
+<span class="sd">        The method returns None and no habits are deleted.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">habit1</span> <span class="o">=</span> <span class="n">habit_tracker</span><span class="o">.</span><span class="n">add_habit</span><span class="p">(</span><span class="s2">&quot;Exercise&quot;</span><span class="p">,</span> <span class="s2">&quot;Do 30 minutes of exercise&quot;</span><span class="p">,</span> <span class="s2">&quot;daily&quot;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">habit_tracker</span><span class="o">.</span><span class="n">habits</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+
+    <span class="n">deleted_habit</span> <span class="o">=</span> <span class="n">habit_tracker</span><span class="o">.</span><span class="n">delete_habit</span><span class="p">(</span><span class="mi">999</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">deleted_habit</span> <span class="ow">is</span> <span class="kc">None</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">habit_tracker</span><span class="o">.</span><span class="n">habits</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+    <span class="k">assert</span> <span class="n">habit_tracker</span><span class="o">.</span><span class="n">get_habit_by_id</span><span class="p">(</span><span class="n">habit1</span><span class="o">.</span><span class="n">id</span><span class="p">)</span> <span class="o">==</span> <span class="n">habit1</span></div>
+
+
+<span class="c1"># Run the tests</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">pytest</span><span class="o">.</span><span class="n">main</span><span class="p">([</span><span class="vm">__file__</span><span class="p">])</span>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Denitsa Draganova.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
