@@ -1,9 +1,6 @@
-import os
 from dotenv import load_dotenv
 import logging
 import psycopg2
-from psycopg2 import sql
-from datetime import datetime
 from src.habit import Habit
 
 # Setting the logger
@@ -36,7 +33,7 @@ class DataPersistence:
             password: object,
             host: object,
             port: object
-    ) -> object:
+    ) -> None:
         """
         Initialize the database connection.
 

@@ -89,6 +89,7 @@ class CLI:
                     print(f"Habit with ID {args.habit_id} not found")
 
             elif args.command == "analyze":
+                # noinspection PyTypeHints
                 if args.list:
                     habits = habit_tracker.get_all_habits()
                     if habits:

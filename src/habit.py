@@ -24,7 +24,6 @@ class Habit:
         periodicity (str): Frequency of the habit ('daily' or 'weekly').
         creation_date (datetime): Date and time when the habit was created.
         completed_dates (list): List of datetime objects representing completion dates.
-        is_broken (bool): Status indicating if the habit is broken.
     """
 
     def __init__(self, name, description, periodicity, id=None, creation_date=None):
@@ -45,13 +44,29 @@ class Habit:
         self.periodicity = periodicity
         self.creation_date = creation_date or datetime.now()  # takes the argument which is not 'None'
         self.completed_dates = []
-        self.is_broken = False
+
+    def __eq__(self, input_obj):
+        """
+        For direct Habit objects comparison
+        by their id property
+        """
+
+        if isinstance(input_obj, Habit):
+            return self.id == input_obj.id
+        return False
+
+    def __hash__(self):
+        """
+        For hashing the id of the Habit object
+        to use it as keys in dictionaries or sets
+        """
+
+        return hash(self.id)
 
     def complete_task(self):
         """Mark the habit as completed for the current date and time."""
         try:
             self.completed_dates.append(datetime.now())
-            self.is_broken = False
             logger.info("Task completed")
         except Exception as e:
             logger.error(f"An unexpected error occurred: {e}", exc_info=True)
@@ -68,16 +83,20 @@ class Habit:
             if not self.completed_dates:
                 # If there are no completion dates, check if the habit should have been completed by now
                 if self.periodicity == 'daily':
-                    return (datetime.now() - self.creation_date).days < 1
+                    is_completed = (datetime.now() - self.creation_date).days < 1
+                    return is_completed
                 elif self.periodicity == 'weekly':
-                    return (datetime.now() - self.creation_date).days < 7
+                    is_completed = (datetime.now() - self.creation_date).days < 7
+                    return is_completed
             else:
                 # Check if the last completion date is within the required period
                 last_completion = self.completed_dates[-1]
                 if self.periodicity == 'daily':
-                    return (datetime.now() - last_completion).days < 1
+                    is_completed = (datetime.now() - last_completion).days < 1
+                    return is_completed
                 elif self.periodicity == 'weekly':
-                    return (datetime.now() - last_completion).days < 7
+                    is_completed = (datetime.now() - last_completion).days < 7
+                    return is_completed
         except Exception as e:
             logger.error(f"Task completed check failed: {e}", exc_info=True)
 

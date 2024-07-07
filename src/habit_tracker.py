@@ -12,7 +12,6 @@ logger_formatter = logging.Formatter(
 )
 logger.addHandler(logger_console_handler)
 
-# TODO: In the readme in USAGE - Return a list of all habits with the same periodicity
 
 class HabitTracker:
     """
@@ -49,11 +48,10 @@ class HabitTracker:
         try:
             habit = Habit(name, description, periodicity)
             habit.id = self.db.save_habit(habit)
-            self.habits.append(habit)
+            self.habits = self.db.load_habits()
             return habit
         except Exception as e:
             logger.error(f"Task failed for adding a habit: {e}", exc_info=True)
-
 
     def complete_habit(self, habit_id):
         """
@@ -94,8 +92,6 @@ class HabitTracker:
         except Exception as e:
             logger.error(f"Task failed for getting a habit by ID: {e}", exc_info=True)
 
-
-
     def get_all_habits(self):
         """
         Get all habits.
@@ -108,7 +104,6 @@ class HabitTracker:
             return self.habits
         except Exception as e:
             logger.error(f"Get all habits failed: {e}", exc_info=True)
-
 
     def get_habits_by_periodicity(self, periodicity):
         """
@@ -181,8 +176,7 @@ class HabitTracker:
             habit = self.get_habit_by_id(habit_id)
             if habit:
                 self.db.delete_habit(habit_id)
+                self.habits = self.db.load_habits()
             return habit
         except Exception as e:
             logger.error(f"Deleting habit_id={habit_id} failed, {e}", exc_info=True)
-
-
