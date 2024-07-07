@@ -12,7 +12,22 @@ The `habit_tracker_project` has the following structure:
 habit_tracker/
 ├── docs/
 │   ├── build/
-│   └── source_orig/
+│   │   ├── doctrees/
+│   │   ├── html/..
+│   └── source/
+│   │   ├── _static/
+│   │   ├── _templates/
+│   │   ├── cli.rst
+│   │   ├── conf.py
+│   │   ├── data_persistence.rst
+│   │   ├── habit.rst
+│   │   ├── habit_tracker.rst
+│   │   ├── index.rst
+│   │   ├── sample_data.rst
+│   │   ├── test_habit.rst
+│   │   └── test_habit_tracker.rst
+│   ├── make.bat
+│   └── Makefile
 ├── src/
 │   ├── __init__.py
 │   ├── cli.py
@@ -22,6 +37,7 @@ habit_tracker/
 │   └── sample_data.py
 ├── tests/
 │   ├── __init__.py
+│   ├── test_habit.py
 │   └── test_habit_tracker.py
 ├── venv/
 ├── .gitignore
@@ -138,20 +154,25 @@ Habit Tracker application.
 
 - The `src` directory contains the main application code.  
 - The `tests` directory contains the test suite.  
-- The `docs` directory contains the Sphinx documentation files.  
+- The `docs` directory contains the Sphinx documentation files. 
+- The `source` directory contains the adjustments for Sphinx documentation files generation.
+- The `build` directory contains the generated Sphinx documentation files.
 
 where:  
 
 - the `src folder` contains the main functionality of the application:  
 
     - `habit.py`: Contains the Habit class
+    - `sample_data.py`: Contains the sample data for the habit tracker
     - `data_persistence.py`: Handles database operations
     - `habit_tracker.py`: Main logic for the habit tracker
     - `cli.py`: Command-line interface  
 
+
 - the `tests folder` contains the testing functionality of the application: 
 
-  - `test_habit_tracker.py`: Pytest tests  
+  - `test_habit.py`: Pytest tests for habit.py module
+  - `test_habit_tracker.py`: Pytest tests for habit_tracker.py module
 
 ## Installation
 
