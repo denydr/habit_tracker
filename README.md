@@ -305,7 +305,19 @@ Run the application using the following command:
 
 ```shell
 python -m src.cli [command] [arguments]
-```  
+``` 
+- `help`: Show help for a command
+```shell 
+# General help message
+python -m src.cli help
+
+# Specific subcommand help
+python -m src.cli help add
+python -m src.cli help complete
+python -m src.cli help analyze
+python -m src.cli help delete
+```
+
 
 Available commands:
 
@@ -337,18 +349,6 @@ python -m src.cli analyze --daily-or-weekly [daily|weekly]
 - `delete`: Delete habit by habit id 
 ```shell 
 python -m src.cli delete [habit_id] 
-```
-
-- `help`: Show help for a command
-```shell 
-# General help message
-python -m src.cli help
-
-# Specific subcommand help
-python -m src.cli help add
-python -m src.cli help complete
-python -m src.cli help analyze
-python -m src.cli help delete
 ```
 
 - Example:  
