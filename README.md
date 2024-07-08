@@ -335,16 +335,18 @@ python -m src.cli complete [habit_id]
 ```shell
 # List all habits
 python -m src.cli analyze --list
-
+```
+```shell
 # Show longest streak
 python -m src.cli analyze --longest-streak
-
+```
+```shell
 # Show longest streak of a habit (by ID)
 python -m src.cli analyze --habit-id [habit_id]
-
+```
+```shell
 # Get habits with same periodicity
-python -m src.cli analyze --daily-or-weekly [daily|weekly]
- 
+python -m src.cli analyze --daily-or-weekly [daily|weekly]  
 ```  
 - `delete`: Delete habit by habit id 
 ```shell 
@@ -384,7 +386,7 @@ To generate the documentation, follow these steps:
 cd docs
 ```  
 
-2. Generate `sphinx-quickstart` skeleton:  
+2. Generate `sphinx-quickstart` skeleton.   
 
 ```shell
 sphinx-quickstart

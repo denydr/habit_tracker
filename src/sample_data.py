@@ -79,19 +79,13 @@ if __name__ == "__main__":
 
     sdg = SampleDataGenerator()
 
-    dbname = os.getenv("DATABASE_NAME"),
-    user = os.getenv("DATABASE_USER"),
-    password = os.getenv("DATABASE_PASSWORD"),
-    host = os.getenv("DATABASE_HOST"),
-    port = int(os.getenv("DATABASE_PORT"))
-
     # Update these with your actual database credentials
     db_obj = DataPersistence(
-        dbname=dbname,
-        user=user,
-        password=password,
-        host=host,
-        port=port
+        dbname=os.getenv("DATABASE_NAME"),
+        user=os.getenv("DATABASE_USER"),
+        password=os.getenv("DATABASE_PASSWORD"),
+        host=os.getenv("DATABASE_HOST"),
+        port=int(os.getenv("DATABASE_PORT"))
     )
 
     sdg.generate_sample_data(db_obj)

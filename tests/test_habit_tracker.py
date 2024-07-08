@@ -339,4 +339,3 @@ def test_delete_habit_not_found(habit_tracker):
 # Run the tests
 if __name__ == "__main__":
     pytest.main([__file__])
-
